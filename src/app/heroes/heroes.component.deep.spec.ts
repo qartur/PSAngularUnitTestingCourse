@@ -68,5 +68,36 @@ describe('Deep Testing', () =>{
         expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HERROS[0]);
 
     });
+
+
+    it(`should call Heroservice.deleteHero when HeroComponent delete button was cliked version2 `, ()=>{
+        mockHeroService.getHeroes.and.returnValue(of(HERROS));
+        spyOn(fixture.componentInstance,'delete');
+        fixture.detectChanges();
+        
+        const herocomponentsD = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        (<HeroComponent>herocomponentsD[0].componentInstance).delete.emit(undefined);
+        //herocomponentsD[0].triggerEventHandler('delete', null);
+        
+        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HERROS[0]);
+
+    });
+
+
+    it(`should add new hero when clicked add button on page `, ()=>{
+        mockHeroService.getHeroes.and.returnValue(of(HERROS));
+        fixture.detectChanges();
+        const name = "Mr. Ice";
+        mockHeroService.addHero.and.returnValue(of({id : 4, name : name, strength : 5}));
+        const inputElement = fixture.debugElement.query(By.css('input')).nativeElement ;
+        const addButton = fixture.debugElement.queryAll(By.css('button'))[0] ;
+
+        inputElement.name = name;
+        addButton.triggerEventHandler('click',null);
+        fixture.detectChanges();
+
+        const heroText = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
+        expect(heroText).toContain(name);
+    });
     
 })
