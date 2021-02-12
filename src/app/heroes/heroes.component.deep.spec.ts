@@ -1,4 +1,4 @@
-import { Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
+import { Component, Directive, Input, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
@@ -7,6 +7,22 @@ import { HeroDetailComponent } from "../hero-detail/hero-detail.component";
 import { HeroService } from "../hero.service";
 import { HeroComponent } from "../hero/hero.component";
 import { HeroesComponent } from "../heroes/heroes.component"
+
+
+@Directive({
+    selector : '[routerLink]',
+    host : { '(click)' : 'onClick()' }
+
+})
+export class RouterLinkDirectibeSub {
+    @Input('routerLink') linkParams: any;
+    navigateTo : any = null;
+
+    onClick(){
+
+        this.navigateTo = this.linkParams;
+    }
+}
 
 describe('Deep Testing', () =>{
     let fixture : ComponentFixture<HeroesComponent>;
@@ -22,11 +38,11 @@ describe('Deep Testing', () =>{
          ];
          mockHeroService = jasmine.createSpyObj(['getHeroes','addHero','deleteHero']);
          TestBed.configureTestingModule({
-            declarations : [HeroesComponent, HeroComponent],
+            declarations : [HeroesComponent, HeroComponent, RouterLinkDirectibeSub],
             providers : [
                 {provide : HeroService, useValue : mockHeroService}
             ],
-            schemas : [NO_ERRORS_SCHEMA]
+            //schemas : [NO_ERRORS_SCHEMA]
         });  
         fixture = TestBed.createComponent(HeroesComponent);
 
@@ -96,7 +112,7 @@ describe('Deep Testing', () =>{
         addButton.triggerEventHandler('click',null);
         fixture.detectChanges();
 
-        const heroText = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
+        const heroText = fixture.debugElement.nativeElement.query(By.css("ul")).textContent;
         expect(heroText).toContain(name);
     });
     
