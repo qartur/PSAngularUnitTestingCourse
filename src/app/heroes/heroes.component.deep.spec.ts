@@ -115,5 +115,19 @@ describe('Deep Testing', () =>{
         const heroText = fixture.debugElement.nativeElement.query(By.css("ul")).textContent;
         expect(heroText).toContain(name);
     });
+
+
+    it('Should corect router for the first hero', () => {
+        const heroComponent  = fixture.debugElement.queryAll(By.directive(HeroesComponent));
+        
+        let routerlink = heroComponent[0].query(By.directive(RouterLinkDirectibeSub)).
+            injector.get(RouterLinkDirectibeSub);
+
+
+        heroComponent[0].query(By.css('a')).triggerEventHandler('click',null);
+
+         expect(routerlink.linkParams).toBe('/detal/1');
+
+    })
     
 })
