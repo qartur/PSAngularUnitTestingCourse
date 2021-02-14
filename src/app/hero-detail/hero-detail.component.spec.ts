@@ -37,4 +37,17 @@ describe('testing hero service',() => {
         expect(fixture.debugElement.nativeElement.querySelector("h2").textContent).toContain('SUPER DUDE')
 
     })
+
+    it('shuld update hero when save is called', (done) => {
+        mockHeroService.updateHero.and.returnValue(of({}));
+        fixture.detectChanges();
+
+        fixture.componentInstance.save();
+        setTimeout(() => {
+            expect(mockHeroService.updateHero).toHaveBeenCalled();
+            done();
+        },300);
+ 
+
+    });
 })
