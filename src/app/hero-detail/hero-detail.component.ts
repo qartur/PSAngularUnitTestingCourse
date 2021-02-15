@@ -33,10 +33,18 @@ export class HeroDetailComponent implements OnInit {
     this.location.back();
   }
 
- save(): void {
-   debunce(() => {
-    this.heroService.updateHero(this.hero)
-      .subscribe(() => this.goBack())},250,false)()
+//  save(): void {
+//    debunce(() => {
+//     this.heroService.updateHero(this.hero)
+//       .subscribe(() => this.goBack())},250,false)()
+//   }
+
+  save(): void {
+    var p = new Promise<void>((resolve) => { 
+      this.heroService.updateHero(this.hero)
+      .subscribe(() => this.goBack());
+      resolve();
+    });
   }
 }
 

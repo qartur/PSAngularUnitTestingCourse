@@ -1,10 +1,11 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, fakeAsync, flush, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
 import { HeroService } from "../hero.service";
 import { HeroDetailComponent } from "./hero-detail.component";
 import { Location } from '@angular/common';
 import { of } from "rxjs";
 import { FormsModule } from "@angular/forms";
+import { tick } from "@angular/core/src/render3";
 
 describe('testing hero service',() => {
     let fixture : ComponentFixture<HeroDetailComponent>;
@@ -38,7 +39,7 @@ describe('testing hero service',() => {
 
     })
 
-    it('shuld update hero when save is called', (done) => {
+    xit('shuld update hero when save is called', (done) => {
         mockHeroService.updateHero.and.returnValue(of({}));
         fixture.detectChanges();
 
@@ -50,4 +51,31 @@ describe('testing hero service',() => {
  
 
     });
+    // use fake async function 
+    // it('shuld update hero when save is called',fakeAsync (() => {
+    //     mockHeroService.updateHero.and.returnValue(of({}));
+    //     fixture.detectChanges();
+
+    //     fixture.componentInstance.save();
+    //     tick(250);
+    //     //use flush() when we don't know how much we must wait
+
+    //     expect(mockHeroService.updateHero).toHaveBeenCalled();
+        
+
+    // }));
+
+
+     // use fake async function 
+     it('shuld update hero when save is called',async (() => {
+        mockHeroService.updateHero.and.returnValue(of({}));
+        fixture.detectChanges();
+
+        fixture.componentInstance.save();
+        fixture.whenStable().then(() => {
+
+            expect(mockHeroService.updateHero).toHaveBeenCalled();
+        });
+        
+    }));
 })
